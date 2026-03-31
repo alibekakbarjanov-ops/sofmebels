@@ -28,7 +28,7 @@ const fbApp = initializeApp(firebaseConfig);
 const auth  = getAuth(fbApp);
 
 const BASE = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-  ? "https://sofmebel.onrender.com/"
+  ? "https://sofmebel.onrender.com"
   : location.origin;
 const API        = BASE + "/api";
 const SOCKET_URL = BASE;
