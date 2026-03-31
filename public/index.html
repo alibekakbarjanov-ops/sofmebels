@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SOF SHOP</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+
+  <!-- AUTH -->
+  <div id="auth" class="auth">
+    <div class="card">
+      <div class="auth-logo"><span class="logo-text">SOF<span class="logo-red">SHOP</span></span></div>
+      <div class="muted" style="text-align:center;margin-bottom:8px;font-size:14px">Kirish yoki ro'yxatdan o'tish</div>
+      <div class="tabs">
+        <button id="tabLogin" class="tab active" type="button">Kirish</button>
+        <button id="tabReg" class="tab" type="button">Ro'yxat</button>
+      </div>
+      <form id="loginForm" class="form">
+        <label>Gmail</label><input id="loginEmail" type="email" required placeholder="example@gmail.com"/>
+        <label>Parol</label><input id="loginPass" type="password" required placeholder="••••••••"/>
+        <button class="btn primary" type="submit">Kirish</button>
+      </form>
+      <form id="regForm" class="form hidden">
+        <label>Gmail</label><input id="regEmail" type="email" required placeholder="example@gmail.com"/>
+        <label>Parol</label><input id="regPass" type="password" required placeholder="••••••••"/>
+        <div class="grid2">
+          <div><label>Ism</label><input id="regFirst" required placeholder="Ali"/></div>
+          <div><label>Familya</label><input id="regLast" required placeholder="Valiyev"/></div>
+        </div>
+        <label>Telefon</label><input id="regPhone" required placeholder="+998901234567"/>
+        <div class="grid2">
+          <div><label>Til</label>
+            <select id="regLang">
+              <option value="uz">O'zbek</option>
+              <option value="ru">Русский</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div><label>Viloyat</label><select id="regRegion"></select></div>
+        </div>
+        <label>Tuman</label><select id="regDistrict"></select>
+        <button class="btn primary" type="submit">Ro'yxatdan o'tish</button>
+      </form>
+      <div id="authMsg" class="msg hidden"></div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="app hidden">
+
+    <!-- DESKTOP SIDEBAR -->
+    <aside class="sidebar-desktop" id="sidebarDesktop">
+      <div class="sd-logo">SOF<span>SHOP</span></div>
+      <nav class="sd-nav">
+        <button class="sd-btn active" data-go="home"    type="button"><span class="sd-icon">🏠</span>Bosh sahifa</button>
+        <button class="sd-btn"        data-go="catalog"  type="button"><span class="sd-icon">📚</span>Katalog</button>
+        <button class="sd-btn"        data-go="fav"      type="button"><span class="sd-icon">❤️</span>Sevimlilar</button>
+        <button class="sd-btn"        data-go="cart"     type="button"><span class="sd-icon">🛒</span>Savat<span class="sd-cart-count hidden" id="sdCartCount">0</span></button>
+        <button class="sd-btn"        data-go="profile"  type="button"><span class="sd-icon">👤</span>Profil</button>
+      </nav>
+      <div class="sd-foot">
+        <div class="sd-av" id="sdAv">?</div>
+        <div class="sd-name" id="sdName">—</div>
+        <button class="sd-logout" id="sdLogout" title="Chiqish" type="button">⎋</button>
+      </div>
+    </aside>
+
+    <!-- APP CONTENT (topbar + main) -->
+    <div class="app-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-logo">SOF<span>SHOP</span></div>
+      <div class="topbar-search-wrap">
+        <input id="search" class="search" placeholder="Qidirish..."/>
+      </div>
+      <div class="topbar-actions">
+        <div id="gpsIndicator" class="gps-indicator" title="GPS">
+          <div id="gpsIndicatorDot" class="gps-ind-dot"></div>
+          <span id="gpsIndicatorLbl" class="gps-ind-lbl">GPS</span>
+        </div>
+        <button id="logout" class="chip" type="button" title="Chiqish">⎋</button>
+      </div>
+    </header>
+
+    <main class="main">
+
+      <!-- HOME -->
+      <section id="view-home" class="view">
+        <div id="ads" class="ads hidden"></div>
+        <div class="section-header">
+          <div class="h2">Mahsulotlar</div>
+          <div class="filter-pills">
+            <button id="filterAll"      class="pill active" type="button">Hammasi</button>
+            <button id="filterDiscount" class="pill"        type="button">Chegirma</button>
+            <button id="filterNew"      class="pill"        type="button">Yangi</button>
+          </div>
+        </div>
+        <div id="homeGrid" class="grid"></div>
+        <div id="homeEmpty" class="empty hidden">Mahsulot topilmadi</div>
+      </section>
+
+      <!-- CATALOG -->
+      <section id="view-catalog" class="view hidden">
+        <div class="section-header">
+          <div class="h2">Katalog</div>
+          <button id="catBack" class="pill hidden" type="button">← Orqaga</button>
+        </div>
+        <div id="catalogList" class="list"></div>
+      </section>
+
+      <!-- CART -->
+      <section id="view-cart" class="view hidden">
+        <div class="section-header">
+          <div class="h2">Savat</div>
+          <button id="cartClear" class="pill danger" type="button">Tozalash</button>
+        </div>
+        <div id="cartList" class="list"></div>
+        <div class="card2" style="margin-top:14px">
+          <div class="row between">
+            <div class="muted">Jami</div>
+            <div id="cartTotal" class="price">0 so'm</div>
+          </div>
+          <div class="miniTitle">Buyurtma tarkibi</div>
+          <div id="cartPreview" class="mini"></div>
+          <button id="openReceipt" class="btn primary" style="margin-top:12px;width:100%" type="button">Buyurtma berish</button>
+        </div>
+      </section>
+
+      <!-- FAV -->
+      <section id="view-fav" class="view hidden">
+        <div class="h2" style="margin-bottom:12px">Sevimlilar</div>
+        <div id="favGrid" class="grid"></div>
+        <div id="favEmpty" class="empty hidden">Sevimlilar bo'sh</div>
+      </section>
+
+      <!-- PROFILE -->
+      <section id="view-profile" class="view hidden">
+        <div class="profile-card">
+          <div class="profile-avatar" id="profileAvatar">?</div>
+          <div class="profile-info">
+            <div id="profileName" class="profile-name">—</div>
+            <div id="profilePhone" class="profile-sub">—</div>
+            <div id="profileRegion" class="profile-sub">—</div>
+          </div>
+        </div>
+        <div class="profile-tabs">
+          <button class="ptab active" data-ptab="orders"  type="button">📦 Buyurtmalar</button>
+          <button class="ptab"        data-ptab="reviews" type="button">✍️ Sharhlar</button>
+        </div>
+        <div id="ptab-orders">
+          <div class="filter-pills" style="margin:8px 0 12px">
+            <button id="btnActiveOrders"  class="pill active" type="button">Aktiv</button>
+            <button id="btnHistoryOrders" class="pill"        type="button">Tarix</button>
+          </div>
+          <div id="ordersList" class="list"></div>
+          <div id="ordersEmpty" class="empty hidden">Buyurtma yo'q</div>
+        </div>
+        <div id="ptab-reviews" class="hidden">
+          <div id="reviewableList" class="list"></div>
+          <div id="reviewsEmpty" class="empty" style="display:none">Sharh qoldirish uchun yetkazilgan buyurtma yo'q</div>
+        </div>
+      </section>
+
+      <!-- PRODUCT DETAIL -->
+      <section id="view-product" class="view hidden">
+        <button id="prodBack" class="pill" style="margin-bottom:12px" type="button">← Orqaga</button>
+        <div id="productBox"></div>
+        <div class="h2" style="margin:16px 0 10px">Shu katalogdagi mahsulotlar</div>
+        <div id="sameGrid" class="grid"></div>
+        <div class="h2" style="margin:16px 0 10px">💬 Sharhlar</div>
+        <div id="reviewsBox" class="list"></div>
+      </section>
+
+      <!-- ADMIN -->
+      <section id="view-admin" class="view hidden">
+        <div class="section-header">
+          <div class="h2">ADMIN PANEL</div>
+          <button id="adminBack" class="pill" type="button">← Orqaga</button>
+        </div>
+        <div class="tabs2">
+          <button class="tab2 active" data-atab="add"        type="button">➕ Mahsulot</button>
+          <button class="tab2"        data-atab="list"       type="button">📦 Mahsulotlar</button>
+          <button class="tab2"        data-atab="catalogs"   type="button">📚 Kataloglar</button>
+          <button class="tab2"        data-atab="orders"     type="button">🛒 Buyurtmalar</button>
+          <button class="tab2"        data-atab="ads"        type="button">📢 Reklama</button>
+          <button class="tab2"        data-atab="outofstock" type="button">🔴 Qolmagan</button>
+          <button class="tab2"        data-atab="archive"    type="button">📁 Arxiv</button>
+        </div>
+
+        <!-- ADD -->
+        <div id="admin-add" class="abox">
+          <div id="adminHint" class="muted" style="margin-bottom:8px;font-size:13px">Yangi mahsulot</div>
+          <form id="productForm" class="form2">
+            <input id="editId" type="hidden" />
+            <div class="grid2">
+              <div><label>Nomi</label><input id="pName" required /></div>
+              <div><label>Kod (unikal)</label><input id="pCode" required /></div>
+            </div>
+            <div class="grid2">
+              <div><label>Narx</label><input id="pPrice" type="number" min="0" required /></div>
+              <div><label>Omborda (dona)</label><input id="pStock" type="number" min="0" value="0" /></div>
+            </div>
+            <div class="grid2">
+              <div><label>3 oylik to'lov</label><input id="pPrice3m" type="number" min="0" placeholder="0" /></div>
+              <div><label>6 oylik to'lov</label><input id="pPrice6m" type="number" min="0" placeholder="0" /></div>
+            </div>
+            <div class="grid2">
+              <div><label>12 oylik to'lov</label><input id="pPrice12m" type="number" min="0" placeholder="0" /></div>
+              <div><label>Turi</label>
+                <select id="pType">
+                  <option value="normal">Oddiy</option>
+                  <option value="discount">Chegirma</option>
+                  <option value="new">Yangi</option>
+                </select>
+              </div>
+            </div>
+            <div id="discountBox" class="grid2">
+              <div><label>Chegirma %</label><input id="pDiscount" type="number" min="0" max="90" value="0" /></div>
+              <div class="muted" style="align-self:end;font-size:12px">1..90 oraliqda</div>
+            </div>
+            <div id="newBox" class="grid2 hidden">
+              <div><label>Yangi necha kun</label><input id="pNewDays" type="number" min="1" value="1" /></div>
+              <div class="muted" style="align-self:end;font-size:12px">Muddat tugasa chiqadi</div>
+            </div>
+            <div class="grid2">
+              <div><label>Katalog</label><select id="pCat"></select></div>
+              <div><label>Sub-katalog</label><select id="pSub"></select></div>
+            </div>
+            <label>Ranglar (vergul bilan)</label>
+            <input id="pColors" placeholder="oq,qora,qizil"/>
+            <label>Tavsif</label>
+            <textarea id="pDesc" rows="3"></textarea>
+            <label>Rasmlar URL (max 10)</label>
+            <div id="imgInputs" class="imgInputs"></div>
+            <button id="addImg" class="pill" type="button">➕ Rasm qo'shish</button>
+            <div id="imgPreview" class="imgPreview"></div>
+            <div class="grid2">
+              <button class="btn primary" type="submit">💾 Saqlash</button>
+              <button id="cancelEdit" class="pill danger hidden" type="button">Bekor</button>
+            </div>
+            <div id="adminMsg" class="msg hidden"></div>
+          </form>
+        </div>
+
+        <!-- LIST -->
+        <div id="admin-list" class="abox hidden">
+          <div class="admin-list-header">
+            <input id="adminSearch" class="search2" style="flex:1" placeholder="Nom/kod bo'yicha qidirish"/>
+            <button id="exportExcel" class="btn-excel" type="button">📊 Excelga yuklash</button>
+          </div>
+          <div id="adminProducts" class="list"></div>
+        </div>
+
+        <!-- CATALOGS -->
+        <div id="admin-catalogs" class="abox hidden">
+          <div class="catalog-admin-wrap">
+            <div class="catalog-admin-left">
+              <div class="catalog-admin-title">Kataloglar</div>
+              <div id="adminCatalogList" class="list"></div>
+              <div class="catalog-add-form">
+                <input id="newCatName" placeholder="Yangi katalog nomi"/>
+                <button id="addCatBtn" class="btn primary" style="white-space:nowrap" type="button">➕ Qo'shish</button>
+              </div>
+            </div>
+            <div class="catalog-admin-right">
+              <div class="catalog-admin-title">Sub-kataloglar: <span id="selectedCatName" style="color:var(--red)">—</span></div>
+              <div id="adminSubCatList" class="list"></div>
+              <div class="catalog-add-form">
+                <input id="newSubCatName" placeholder="Yangi sub-katalog nomi"/>
+                <button id="addSubCatBtn" class="btn primary" style="white-space:nowrap" type="button">➕ Qo'shish</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORDERS -->
+        <div id="admin-orders" class="abox hidden">
+          <div id="adminOrders" class="list"></div>
+        </div>
+
+        <!-- ADS -->
+        <div id="admin-ads" class="abox hidden">
+          <button id="saveAds" class="btn primary" style="margin-bottom:10px" type="button">💾 Reklamani saqlash</button>
+          <div id="adsPick" class="list"></div>
+          <div id="adsMsg" class="msg hidden"></div>
+        </div>
+
+        <!-- OUT OF STOCK -->
+        <div id="admin-outofstock" class="abox hidden">
+          <div class="muted" style="margin-bottom:10px;font-size:13px">Tugagan mahsulotlar — stokni to'ldiring</div>
+          <div id="adminOutOfStock" class="list"></div>
+        </div>
+
+        <!-- ARCHIVE -->
+        <div id="admin-archive" class="abox hidden">
+          <div id="adminArchive" class="list"></div>
+        </div>
+      </section>
+
+      <!-- DRIVER -->
+      <section id="view-driver" class="view hidden">
+        <div class="section-header">
+          <div class="h2">SHOFER PANEL</div>
+          <button id="driverBack" class="pill" type="button">← Orqaga</button>
+        </div>
+        <div id="driverOrders" class="list"></div>
+      </section>
+
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav class="nav" id="bottomNav">
+      <button class="navBtn active" data-go="home"    type="button">🏠<span>Bosh</span></button>
+      <button class="navBtn"        data-go="catalog"  type="button">📚<span>Katalog</span></button>
+      <button class="navBtn"        data-go="cart"     type="button">🛒<span>Savat</span></button>
+      <button class="navBtn"        data-go="fav"      type="button">❤️<span>Sevimli</span></button>
+      <button class="navBtn"        data-go="profile"  type="button">👤<span>Profil</span></button>
+    </nav>
+
+    </div><!-- /app-content -->
+
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- SECRET MODAL -->
+    <div id="secretModal" class="modal hidden">
+      <div class="modalCard">
+        <div class="row between">
+          <div id="secretTitle" class="h2">Kirish</div>
+          <button id="secretClose" class="pill" type="button">✕</button>
+        </div>
+        <form id="secretForm" class="form" style="margin-top:10px">
+          <label>Login</label><input id="secretLogin" />
+          <label>Parol</label><input id="secretPass" type="password" />
+          <button class="btn primary" type="submit">Kirish</button>
+        </form>
+        <div id="secretMsg" class="msg hidden"></div>
+      </div>
+    </div>
+
+    <!-- RECEIPT MODAL -->
+    <div id="receiptModal" class="modal hidden">
+      <div class="modalCard">
+        <div class="row between">
+          <div class="h2">Chek</div>
+          <button id="receiptClose" class="pill" type="button">✕</button>
+        </div>
+        <div id="receiptBox" class="receipt"></div>
+        <label class="agree">
+          <input id="agree" type="checkbox"/>
+          <span>Chek ma'lumotlari to'g'ri, roziman</span>
+        </label>
+        <button id="sendOrder" class="btn primary disabled" style="margin-top:10px;width:100%" type="button" disabled>Buyurtmani yuborish</button>
+      </div>
+    </div>
+
+    <!-- ORDER VIEW MODAL -->
+    <div id="orderViewModal" class="modal hidden">
+      <div class="modalCard">
+        <div class="row between">
+          <div class="h2">Chek</div>
+          <button id="orderViewClose" class="pill" type="button">✕</button>
+        </div>
+        <div id="orderViewBox" class="receipt"></div>
+      </div>
+    </div>
+
+    <!-- REVIEW MODAL -->
+    <div id="reviewModal" class="modal hidden">
+      <div class="modalCard">
+        <div class="row between">
+          <div class="h2">Sharh qoldirish</div>
+          <button id="reviewClose" class="pill" type="button">✕</button>
+        </div>
+        <div id="reviewProductName" class="muted" style="margin:6px 0;font-size:13px"></div>
+        <input type="hidden" id="reviewProductId"/>
+        <input type="hidden" id="reviewOrderId"/>
+        <div class="form" style="margin-top:10px">
+          <label>✅ Yaxshi tomonlari</label>
+          <textarea id="reviewPros" rows="2" placeholder="Yaxshi tomonlari..."></textarea>
+          <label>⚠️ Kamchiliklari</label>
+          <textarea id="reviewCons" rows="2" placeholder="Kamchiliklari..."></textarea>
+          <label>💬 Umumiy fikr</label>
+          <textarea id="reviewComment" rows="3" placeholder="Fikringiz..."></textarea>
+          <button id="submitReview" class="btn primary" type="button">💾 Saqlash</button>
+          <div id="reviewMsg" class="msg hidden"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="./app.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</body>
+</html>
