@@ -994,21 +994,21 @@ httpServer.listen(PORT, () => {
 ╔══════════════════════════════════════════╗
 ║   SOF SHOP Backend ishga tushdi! ✅      ║
 ╠══════════════════════════════════════════╣
-║  URL:  http://localhost:${PORT}              ║
+║  URL:  https://sofmebels-npsk.onrender.com              ║
 ║  DB:   PostgreSQL                        ║
 ╚══════════════════════════════════════════╝
 
 Mijoz auth (YANGI):
-  POST http://localhost:${PORT}/api/auth/register        ← ro'yxat
-  POST http://localhost:${PORT}/api/auth/login           ← kirish
-  GET  http://localhost:${PORT}/api/auth/me              ← profil (token)
-  PUT  http://localhost:${PORT}/api/auth/me              ← profil yangilash
-  PUT  http://localhost:${PORT}/api/auth/change-password ← parol o'zgartirish
+  POST https://sofmebels-npsk.onrender.com/api/auth/register        ← ro'yxat
+  POST https://sofmebels-npsk.onrender.com/api/auth/login           ← kirish
+  GET  https://sofmebels-npsk.onrender.com//api/auth/me              ← profil (token)
+  PUT  https://sofmebels-npsk.onrender.com/api/auth/me              ← profil yangilash
+  PUT  https://sofmebels-npsk.onrender.com//api/auth/change-password ← parol o'zgartirish
 
 Admin auth:
-  POST http://localhost:${PORT}/api/auth/register-admin
-  POST http://localhost:${PORT}/api/auth/login-admin
+  POST https://sofmebels-npsk.onrender.com/api/auth/register-admin
+  POST https://sofmebels-npsk.onrender.com/api/auth/login-admin
 
-Health: http://localhost:${PORT}/health
+Health: https://sofmebels-npsk.onrender.com/
   `);
 });
